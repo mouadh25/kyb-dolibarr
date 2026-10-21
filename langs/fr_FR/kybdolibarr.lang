@@ -1,0 +1,54 @@
+# KYB Dolibarr Connector - Langue Française (fr_FR)
+# Conforme aux exigences de neutralité juridique de l'ADR #127 et Loi 25-11
+
+Module500120Name = KYB Algérie
+Module500120Desc = Authentification légale NIF/RC (<10ms), conformité temporelle CIDTA 169/176 & CTCA 30 et autocomplétion des tiers algériens
+
+# Localisation Fiscale Algérie (Décret Exécutif 05-468)
+ProfId1DZ = Registre du Commerce (RC)
+ProfId2DZ = Numéro d'Article d'Imposition (AI)
+ProfId3DZ = Identifiant Fiscal Unique (NIF)
+ProfId4DZ = Identifiant Statistique National (NIS)
+
+KybSetupDescription = Ce module connecte Dolibarr à la passerelle de vérification KYB hébergée au Datacenter d'Algérie Télécom, garantissant la conformité à la Loi 25-11 sur la résidence des données.
+KybParamApiUrl = URL de l'API KYB
+KybParamApiKey = Clé API Secrète (sk_live_...)
+KybParamTimeout = Délai Réseau (secondes)
+KybParamStrictBlocking = Blocage Strict à la Validation
+KybParamSandboxMode = Mode Bac à Sable (Sandbox)
+KybBtnTestConnection = Tester la Connexion API
+
+KybAutofillSuccess = Tiers complété et vérifié par KYB
+KybComplianceCardTitle = Statut d'Identification Légale & Fiscale KYB
+KybEnrichmentCardTitle = Identification Légale & Fiscale (Vérifié par KYB)
+KybStatusLabel = Statut au Registre du Commerce (CNRC)
+KybStatusActive = ACTIF (Entité en règle au registre de commerce)
+KybStatusRadiated = RADIÉ (Radiation constatée au registre)
+KybStatusUnverified = NON VÉRIFIÉ (Aucune interrogation effectuée)
+KybNoIdentifier = Identifiant fiscal ou registre de commerce manquant
+
+KybLegalRepresentative = Gérant / Dirigeant Légal
+KybLegalForm = Forme Juridique Certifiée
+KybShareCapital = Capital Social Certifié
+KybMainActivity = Activité Principale (NAE)
+KybRegistrationDate = Date d'Immatriculation
+KybRadiationDate = Date de Radiation
+KybSovereignNotice = Vérifié par KYB depuis les portails publics · Datacenter Algérie Télécom (Loi 25-11)
+
+KybWarningMissingNif = Attention : Ce fournisseur ne possède aucun Identifiant Fiscal (NIF) renseigné (Obligation Décret 05-468).
+KybNoticeSupplierRadiated = Notice de Conformité Fiscale : Fournisseur radié au registre public (Date : %s). La déductibilité fiscale de cette charge et de la TVA est à vérifier conformément aux articles 169 & 176 du CIDTA et l'article 30 du CTCA.
+KybBlockingActiveMsg = La validation a été interrompue conformément au paramètre de blocage strict de votre entreprise.
+KybInvoiceBannerNotice = Fournisseur audité lors de la validation sous le cadre légal CIDTA 169/176 et CTCA 30 (Loi 25-11).
+
+# Autocomplétion & Suggestions de Tiers
+KybSearching = Recherche dans le référentiel national...
+KybNoResults = Aucune entreprise trouvée pour cette recherche
+KybAutocompleteHint = Tapez au moins 3 caractères pour afficher les suggestions officielles (Personnes Morales).
+KybRateLimited = Trop de requêtes rapides. Veuillez patienter un instant.
+KybPpProtectionNotice = Protection des Personnes Physiques (Loi 18-07 & Loi 25-11) : L'autocomplétion par raison sociale est strictement restreinte aux Personnes Morales. Les Personnes Physiques (artisans, commerçants) doivent être saisies directement par leur NIF ou RC officiel.
+
+# Audit Fiscal de Masse (État 104 / Déclarations Fiscales)
+KybBulkAuditLabel = Audit Fiscal KYB (Loi 25-11 / État 104)
+KybNoThirdpartiesSelected = Aucun tiers sélectionné pour l'audit fiscal.
+KybBulkAuditSummary = Audit Fiscal KYB terminé sur %d tiers : %d Actif(s), %d Radié(s), %d Non vérifié(s) ou sans identifiant.
+KybBulkAuditRadiatedWarning = Attention fiscale (CIDTA 169/176 & CTCA 30) - Tiers radiés détectés :

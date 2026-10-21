@@ -1,0 +1,32 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Editor & IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+
+# PHP / Composer
+vendor/
+composer.lock
+composer.phar
+*.log
+
+# Packaging artifacts
+*.zip
+*.tar.gz
+*.tgz
+/build/
+/dist/
+/temp/
+

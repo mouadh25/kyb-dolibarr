@@ -1,0 +1,48 @@
+# KYB Dolibarr Connector - English Language (en_US)
+# Aligned with legal neutrality requirements of ADR #127
+
+Module500120Name = KYB Algeria
+Module500120Desc = Instant NIF/RC legal verification (<10ms), temporal tax compliance (CIDTA 169/176 & CTCA 30), and Algerian counterparty auto-completion
+
+KybSetupDescription = This module connects Dolibarr to the KYB verification gateway hosted on Algérie Télécom Datacenter, guaranteeing strict Loi 25-11 data residency compliance.
+KybParamApiUrl = KYB API URL
+KybParamApiKey = Secret API Key (sk_live_...)
+KybParamTimeout = Network Timeout (seconds)
+KybParamStrictBlocking = Strict Blocking on Validation
+KybParamSandboxMode = Sandbox Testing Mode
+KybBtnTestConnection = Test API Connection
+
+KybAutofillSuccess = Thirdparty verified by KYB from public portals
+KybComplianceCardTitle = KYB Legal & Tax Compliance Status
+KybEnrichmentCardTitle = Legal & Tax Identification (Verified by KYB)
+KybStatusLabel = Commercial Register Status (CNRC)
+KybStatusActive = ACTIF (Entity properly registered at trade register)
+KybStatusRadiated = RADIATED (Strike-off recorded in public registry)
+KybStatusUnverified = UNVERIFIED (No query performed)
+KybNoIdentifier = Missing Tax ID (NIF) or Commercial Register (RC)
+
+KybLegalRepresentative = Legal Representative / Manager
+KybLegalForm = Certified Legal Form
+KybShareCapital = Certified Share Capital
+KybMainActivity = Main Activity (NAE)
+KybRegistrationDate = Registration Date
+KybRadiationDate = Strike-off Date
+KybSovereignNotice = Verified by KYB from public portals · Algérie Télécom Datacenter (Loi 25-11)
+
+KybWarningMissingNif = Warning: This vendor has no Tax Identification Number (NIF) on file (Executive Decree 05-468 obligation).
+KybNoticeSupplierRadiated = Tax Compliance Notice: Vendor struck off the public commercial register (Date: %s). Tax deductibility of this expense and input VAT must be verified under Articles 169 & 176 CIDTA and Article 30 CTCA.
+KybBlockingActiveMsg = Invoice validation was aborted in accordance with your company's strict blocking compliance policy.
+KybInvoiceBannerNotice = Vendor audited during validation under the legal framework of CIDTA 169/176 and CTCA 30 (Loi 25-11).
+
+# Autocomplete & Suggestions
+KybSearching = Searching national registry...
+KybNoResults = No company found for this search
+KybAutocompleteHint = Type at least 3 characters to display official suggestions (Legal Entities).
+KybRateLimited = Too many rapid requests. Please wait a moment.
+KybPpProtectionNotice = Natural Persons Protection (Loi 18-07 & Loi 25-11): Name autocomplete is strictly restricted to Legal Entities. Natural Persons (merchants, craftsmen) must be entered directly using their official NIF or RC.
+
+# Bulk Audit (État 104 / Tax Returns)
+KybBulkAuditLabel = KYB Tax Audit (Loi 25-11 / État 104)
+KybNoThirdpartiesSelected = No thirdparties selected for tax audit.
+KybBulkAuditSummary = KYB Tax Audit completed on %d thirdparties: %d Active, %d Struck-off, %d Unverified or missing ID.
+KybBulkAuditRadiatedWarning = Tax Warning (CIDTA 169/176 & CTCA 30) - Struck-off entities detected:
