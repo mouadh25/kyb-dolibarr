@@ -55,7 +55,6 @@ The KYB Dolibarr module is engineered to run seamlessly across all major modern 
 
 * **Official Module ZIP:** [Download `module_kybdolibarr-1.0.0.zip` (Releases)](https://github.com/mouadh25/kyb-dolibarr/releases/latest)
 * **Institutional User Manual (PDF):** [Download `USER_MANUAL.pdf`](doc/USER_MANUAL.pdf)
-* **Pilot Pricing & Terms Memo (PDF):** [Download `GRILLE_TARIFAIRE_PILOTE.pdf`](doc/GRILLE_TARIFAIRE_PILOTE.pdf)
 
 ---
 
@@ -180,7 +179,6 @@ In accordance with Algerian tax governance, the connector strictly refrains from
 * **Authoritative API Documentation:** [kyb.digidevagency.dz/docs](https://kyb.digidevagency.dz/docs)
 * **Interactive Scalar OpenAPI 3.1 Reference:** [kyb.digidevagency.dz/docs/scalar](https://kyb.digidevagency.dz/docs/scalar)
 * **Institutional User Manual (PDF):** [`doc/USER_MANUAL.pdf`](doc/USER_MANUAL.pdf)
-* **Pilot Pricing & Terms Memo (PDF):** [`doc/GRILLE_TARIFAIRE_PILOTE.pdf`](doc/GRILLE_TARIFAIRE_PILOTE.pdf)
 * **Release Changelog:** [`CHANGELOG.md`](CHANGELOG.md)
 
 ---
