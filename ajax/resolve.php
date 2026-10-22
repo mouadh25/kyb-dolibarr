@@ -40,7 +40,7 @@ if (empty($user->id)) {
     exit;
 }
 
-if (empty($user->rights->societe->lire) && empty($user->rights->societe->creer)) {
+if (empty($user->admin) && empty($user->rights->societe->lire) && empty($user->rights->societe->creer)) {
     echo json_encode(array('success' => false, 'error' => 'Permission denied'));
     exit;
 }
