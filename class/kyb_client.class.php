@@ -228,12 +228,73 @@ class KybClient
     }
 
     /**
+     * Sends rich instance telemetry heartbeat to the sovereign gateway.
+     * Mirrors Odoo's action_check_kyb_update() POST /api/v1/client/telemetry path.
+     *
+     * @param array $payload Telemetry payload from KybTelemetry::gatherInstanceTelemetry()
+     * @return array|null {has_update, latest_version, force_upgrade, changelog} or null on failure
+     */
+    public function sendTelemetry(array $payload)
+    {
+        if (empty($this->apiKey)) {
+            return null; // Unauthenticated — fall back to anonymous checkVersion()
+        }
+
+        $response = $this->request('POST', '/api/v1/client/telemetry', $payload);
+
+        if ($response && isset($response['latest_version'])) {
+            return array(
+                'has_update'     => !empty($response['has_update']),
+                'latest_version' => $response['latest_version'],
+                'force_upgrade'  => !empty($response['force_upgrade']),
+                'changelog'      => isset($response['changelog']) ? $response['changelog'] : '',
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * Anonymous version check via GET /api/v1/version (no API key required).
+     * Fallback when no API key is configured.
+     *
+     * @param string $currentVersion Installed connector version
+     * @param string $clientType     'dolibarr'
+     * @param string $dbUuid         Non-PII database UUID
+     * @return array|null {has_update, latest_version, force_upgrade, changelog} or null
+     */
+    public function checkVersion($currentVersion, $clientType = 'dolibarr', $dbUuid = '')
+    {
+        $params = '?client=' . urlencode($clientType)
+            . '&version=' . urlencode($currentVersion)
+            . '&dolibarr_version=' . urlencode(defined('DOL_VERSION') ? DOL_VERSION : 'unknown');
+
+        if (!empty($dbUuid)) {
+            $params .= '&db_uuid=' . urlencode($dbUuid);
+        }
+
+        $response = $this->request('GET', '/api/v1/version' . $params);
+
+        if ($response && isset($response['latest_version'])) {
+            return array(
+                'has_update'     => !empty($response['has_update']),
+                'latest_version' => $response['latest_version'],
+                'force_upgrade'  => !empty($response['force_upgrade']),
+                'changelog'      => isset($response['changelog']) ? $response['changelog'] : '',
+            );
+        }
+
+        return null;
+    }
+
+    /**
      * Tests connectivity to the sovereign gateway.
      *
      * @return array Test diagnosis with latency and HTTP status
      */
     public function testConnection()
     {
+
         $startTime = microtime(true);
         $response = $this->request('GET', '/health');
         $elapsedMs = round((microtime(true) - $startTime) * 1000, 2);

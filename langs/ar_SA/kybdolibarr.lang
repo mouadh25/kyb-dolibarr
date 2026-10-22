@@ -46,3 +46,24 @@ KybBulkAuditLabel = تدقيق جبائي KYB (القانون 25-11 / جدول 1
 KybNoThirdpartiesSelected = لم يتم تحديد أي متعامل للتدقيق الجبائي.
 KybBulkAuditSummary = اكتمل التدقيق الجبائي لـ %d متعامل: %d نشط، %d مشطب، %d غير مفحوص أو بدون معرف.
 KybBulkAuditRadiatedWarning = تحذير جبائي (المادتين 169 و176 CIDTA والمادة 30 CTCA) - تم رصد متعاملين مشطبين:
+
+# محرك التحديث التلقائي والتتبع السيادي (الإصدار 2.0.0)
+KybParamAutoUpdatePatches = التحديث التلقائي للتصحيحات
+KybParamAutoUpdatePatchesHelp = عند التفعيل، تُطبّق المهمة اليومية المجدولة التصحيحات التلقائية. في حالة الإيقاف، يُستخدم زر التحديث بنقرة واحدة من هذه الصفحة.
+KybVersionSectionTitle = الإصدار والتتبع السيادي KYB
+KybInstalledVersion = الإصدار المُثبَّت
+KybLatestVersion = آخر إصدار متاح
+KybUpdateAvailable = تحديث متاح
+KybForceUpgrade = تحديث إجباري
+KybUpToDate = محدَّث
+KybLastTelemetry = آخر مزامنة تتبع سيادي
+KybNever = لم تتم المزامنة بعد
+KybChangelog = ملاحظات الإصدار
+KybBtnCheckUpdate = فحص التحديثات
+KybBtnUpgradeNow = تحديث فوري بنقرة واحدة
+KybUpgradeConfirm = هل تؤكد تحديث الموصل KYB في مكانه؟ سيظل Dolibarr متاحاً أثناء العملية.
+KybCheckUpdateDone = اكتمل الفحص. آخر إصدار متاح: v%s
+KybCheckUpdateFailed = تعذّر الوصول إلى بوابة KYB. تحقق من عنوان URL والاتصال بالشبكة.
+KybUpgradeSuccess = تم التحديث إلى v%s بنجاح. أعد تحميل الصفحة.
+KybUpgradeFailed = فشل التحديث. راجع سجلات نظام Dolibarr للمزيد من التفاصيل.
+

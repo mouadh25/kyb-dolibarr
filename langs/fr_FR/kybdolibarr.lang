@@ -52,3 +52,24 @@ KybBulkAuditLabel = Audit Fiscal KYB (Loi 25-11 / État 104)
 KybNoThirdpartiesSelected = Aucun tiers sélectionné pour l'audit fiscal.
 KybBulkAuditSummary = Audit Fiscal KYB terminé sur %d tiers : %d Actif(s), %d Radié(s), %d Non vérifié(s) ou sans identifiant.
 KybBulkAuditRadiatedWarning = Attention fiscale (CIDTA 169/176 & CTCA 30) - Tiers radiés détectés :
+
+# Moteur de Mise à Jour & Télémétrie Souveraine (v2.0.0)
+KybParamAutoUpdatePatches = Mise à Jour Automatique des Correctifs
+KybParamAutoUpdatePatchesHelp = Si activé, la tâche planifiée quotidienne applique automatiquement les correctifs de conformité mineurs. Sinon, vous utilisez le bouton 1-clic dans cette page.
+KybVersionSectionTitle = Version & Télémétrie KYB
+KybInstalledVersion = Version Installée
+KybLatestVersion = Dernière Version Disponible
+KybUpdateAvailable = Mise à Jour Disponible
+KybForceUpgrade = MISE À JOUR OBLIGATOIRE
+KybUpToDate = À jour
+KybLastTelemetry = Dernière Synchronisation Télémétrie
+KybNever = Jamais synchronisé
+KybChangelog = Notes de Version
+KybBtnCheckUpdate = Vérifier les Mises à Jour
+KybBtnUpgradeNow = Mettre à Jour 1-Clic
+KybUpgradeConfirm = Confirmer la mise à jour en place du connecteur KYB ? Dolibarr restera disponible pendant l'opération.
+KybCheckUpdateDone = Vérification terminée. Dernière version disponible : v%s
+KybCheckUpdateFailed = Impossible de joindre la passerelle KYB. Vérifiez l'URL et la connexion réseau.
+KybUpgradeSuccess = Mise à jour vers v%s effectuée avec succès. Rechargez cette page.
+KybUpgradeFailed = Échec de la mise à jour. Consultez les journaux système Dolibarr pour plus de détails.
+

@@ -44,7 +44,7 @@ class modKybDolibarr extends DolibarrModules
         $this->editor_url = 'https://kyb.digidevagency.dz';
 
         // Version of module
-        $this->version = '1.0.0';
+        $this->version = '2.0.0';
 
         // Constant name for activation tracking
         $this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -129,7 +129,76 @@ class modKybDolibarr extends DolibarrModules
                 '1',
                 'Désactive la vérification erronée du NIF sur le champ RC en Algérie',
                 0
+            ),
+            7 => array(
+                'KYB_AUTO_UPDATE_PATCHES',
+                'chaine',
+                '0',
+                'Mise à jour autonome des correctifs : 1 = appliquer automatiquement via cron, 0 = 1-clic manuel uniquement',
+                0
+            ),
+            8 => array(
+                'KYB_LATEST_VERSION',
+                'chaine',
+                '2.0.0',
+                'Dernière version disponible du connecteur KYB (mise à jour par la passerelle)',
+                0
+            ),
+            9 => array(
+                'KYB_HAS_UPDATE',
+                'chaine',
+                '0',
+                'Indicateur de mise à jour disponible (1 = oui, 0 = à jour)',
+                0
+            ),
+            10 => array(
+                'KYB_LAST_TELEMETRY',
+                'chaine',
+                '',
+                'Horodatage de la dernière synchronisation de télémétrie avec la passerelle KYB',
+                0
+            ),
+            11 => array(
+                'KYB_INSTALLED_VERSION',
+                'chaine',
+                '2.0.0',
+                'Version du connecteur KYB actuellement installée (mise à jour lors de chaque upgrade)',
+                0
+            ),
+            12 => array(
+                'KYB_FORCE_UPGRADE',
+                'chaine',
+                '0',
+                'Indicateur de mise à jour urgente signalisée par la passerelle (1 = appliquer immédiatement)',
+                0
+            ),
+            13 => array(
+                'KYB_CHANGELOG',
+                'chaine',
+                '',
+                'Notes de version reu00e7ues de la passerelle KYB lors de la dernière synchronisation',
+                0
             )
+        );
+
+        // ─── Scheduled Background Jobs (Autonomous Telemetry & Update Engine) ───
+        // Mirrors Odoo's ir_cron_kyb_telemetry_sync in data/kyb_cron.xml.
+        // Dolibarr executes these via its native cron scheduler (Admin > System > Cron).
+        $this->cronjobs = array(
+            1 => array(
+                'label'      => 'KYB : Synchronisation de Télémétrie & Vérification des Mises à Jour',
+                'jobtype'    => 'method',
+                'class'      => '/kybdolibarr/cron/kyb_cron_telemetry.php',
+                'objectname' => 'KybCronTelemetry',
+                'method'     => 'run',
+                'parameters' => '',
+                'comment'    => 'Envoie le heartbeat de télémétrie à la passerelle KYB et applique les correctifs autonomes si activés.',
+                'frequency'  => 1,
+                'unitfrequency' => 3600 * 24, // Daily (86400s)
+                'status'     => 0,           // 0 = active, 1 = disabled
+                'test'       => '$conf->global->MAIN_MODULE_KYBDOLIBARR',
+                'priority'   => 50,
+            ),
         );
 
         // Permissions provided by the module

@@ -16,6 +16,7 @@ if (! $res) die("Include of main fails");
 
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 require_once __DIR__ . '/../class/kyb_client.class.php';
+require_once __DIR__ . '/../class/kyb_telemetry.class.php';
 
 global $langs, $user, $conf, $db;
 
@@ -27,29 +28,56 @@ if (!$user->admin) {
 }
 
 $action = GETPOST('action', 'aZ09');
-$testResult = null;
+$testResult    = null;
+$checkResult   = null;
+$upgradeResult = null;
 
-// Handle Save Actions
+// ── Save Settings ─────────────────────────────────────────────────────────
 if ($action == 'update') {
-    $apiUrl = GETPOST('KYB_API_URL', 'alpha');
-    $apiKey = GETPOST('KYB_API_KEY', 'alpha');
-    $timeout = GETPOST('KYB_TIMEOUT', 'int');
-    $strict = GETPOST('KYB_STRICT_BLOCKING', 'int');
-    $sandbox = GETPOST('KYB_SANDBOX_MODE', 'int');
+    $apiUrl     = GETPOST('KYB_API_URL', 'alpha');
+    $apiKey     = GETPOST('KYB_API_KEY', 'alpha');
+    $timeout    = GETPOST('KYB_TIMEOUT', 'int');
+    $strict     = GETPOST('KYB_STRICT_BLOCKING', 'int');
+    $sandbox    = GETPOST('KYB_SANDBOX_MODE', 'int');
+    $autoUpdate = GETPOST('KYB_AUTO_UPDATE_PATCHES', 'int');
 
-    dolibarr_set_const($db, 'KYB_API_URL', trim($apiUrl), 'chaine', 0, '', $conf->entity);
-    dolibarr_set_const($db, 'KYB_API_KEY', trim($apiKey), 'chaine', 0, '', $conf->entity);
-    dolibarr_set_const($db, 'KYB_TIMEOUT', (int)$timeout, 'chaine', 0, '', $conf->entity);
-    dolibarr_set_const($db, 'KYB_STRICT_BLOCKING', (int)$strict, 'chaine', 0, '', $conf->entity);
-    dolibarr_set_const($db, 'KYB_SANDBOX_MODE', (int)$sandbox, 'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_API_URL',            trim($apiUrl),   'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_API_KEY',            trim($apiKey),   'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_TIMEOUT',            (int)$timeout,   'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_STRICT_BLOCKING',    (int)$strict,    'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_SANDBOX_MODE',       (int)$sandbox,   'chaine', 0, '', $conf->entity);
+    dolibarr_set_const($db, 'KYB_AUTO_UPDATE_PATCHES',(int)$autoUpdate,'chaine', 0, '', $conf->entity);
 
     setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 }
 
-// Handle Test Connection
+// ── Test Connection ────────────────────────────────────────────────────────
 if ($action == 'test_connection') {
-    $client = new KybClient();
+    $client     = new KybClient();
     $testResult = $client->testConnection();
+}
+
+// ── Check for Updates (manual heartbeat) ──────────────────────────────────
+if ($action == 'check_update') {
+    $telemetry   = new KybTelemetry($db);
+    $checkResult = $telemetry->syncWithGateway();
+    if ($checkResult) {
+        setEventMessages($langs->trans('KybCheckUpdateDone', $checkResult['latest_version']), null, 'mesgs');
+    } else {
+        setEventMessages($langs->trans('KybCheckUpdateFailed'), null, 'warnings');
+    }
+}
+
+// ── 1-Click In-Place Upgrade ───────────────────────────────────────────────
+if ($action == 'upgrade') {
+    $telemetry     = new KybTelemetry($db);
+    $modulePath    = realpath(__DIR__ . '/..');
+    $upgradeResult = $telemetry->executeUpgrade($modulePath);
+    if ($upgradeResult) {
+        setEventMessages($langs->trans('KybUpgradeSuccess', KybTelemetry::CONNECTOR_VERSION), null, 'mesgs');
+    } else {
+        setEventMessages($langs->trans('KybUpgradeFailed'), null, 'errors');
+    }
 }
 
 $page_name = "Configuration du Connecteur KYB Algérie";
@@ -131,6 +159,18 @@ print '</select>';
 print '</td>';
 print '</tr>';
 
+// KYB_AUTO_UPDATE_PATCHES
+print '<tr class="oddeven">';
+print '<td><span class="fa fa-refresh"></span> '.$langs->trans("KybParamAutoUpdatePatches").'</td>';
+print '<td>';
+print '<select name="KYB_AUTO_UPDATE_PATCHES" class="flat">';
+print '<option value="0"'.(empty($conf->global->KYB_AUTO_UPDATE_PATCHES) ? ' selected' : '').'>Non (1-clic manuel uniquement depuis cette page)</option>';
+print '<option value="1"'.(!empty($conf->global->KYB_AUTO_UPDATE_PATCHES) ? ' selected' : '').'>Oui (Appliquer les correctifs autonomement lors de la tâche planifiée)</option>';
+print '</select>';
+print '<br><small class="opacitymedium">'.$langs->trans("KybParamAutoUpdatePatchesHelp").'</small>';
+print '</td>';
+print '</tr>';
+
 print '</table>';
 
 print '<br><div class="center">';
@@ -139,6 +179,66 @@ print '&nbsp;&nbsp;';
 print '<a href="'.$_SERVER["PHP_SELF"].'?action=test_connection" class="button">'.$langs->trans("KybBtnTestConnection").'</a>';
 print '</div>';
 print '</form>';
+
+// ──────────────────────── Version & Telemetry Section ──────────────────────
+print '<br>';
+print '<table class="noborder centpercent">';
+print '<tr class="liste_titre">';
+print '<th colspan="2"><span class="fa fa-cloud"></span> '.$langs->trans("KybVersionSectionTitle").'</th>';
+print '</tr>';
+
+$installedVersion = KybTelemetry::CONNECTOR_VERSION;
+$latestVersion    = !empty($conf->global->KYB_LATEST_VERSION)    ? $conf->global->KYB_LATEST_VERSION    : $installedVersion;
+$hasUpdate        = !empty($conf->global->KYB_HAS_UPDATE)        && $conf->global->KYB_HAS_UPDATE === '1';
+$forceUpgrade     = !empty($conf->global->KYB_FORCE_UPGRADE)     && $conf->global->KYB_FORCE_UPGRADE === '1';
+$lastTelemetry    = !empty($conf->global->KYB_LAST_TELEMETRY)    ? dol_print_date((int)$conf->global->KYB_LAST_TELEMETRY, 'dayhour') : $langs->trans('KybNever');
+$changelog        = !empty($conf->global->KYB_CHANGELOG)         ? $conf->global->KYB_CHANGELOG        : '';
+
+// Installed version row
+print '<tr class="oddeven">';
+print '<td class="titlefieldfield"><span class="fa fa-tag"></span> '.$langs->trans('KybInstalledVersion').'</td>';
+print '<td><strong style="font-feature-settings: \'tnum\';">v'.$installedVersion.'</strong></td>';
+print '</tr>';
+
+// Latest available version row
+print '<tr class="oddeven">';
+print '<td class="titlefieldfield"><span class="fa fa-cloud-download"></span> '.$langs->trans('KybLatestVersion').'</td>';
+print '<td>';
+if ($hasUpdate || $forceUpgrade) {
+    print '<span class="badge" style="background-color: #f59e0b; color: #fff; padding: 3px 9px; border-radius: 9999px; font-weight: 600;">⬆ v'.$latestVersion.' — '.$langs->trans('KybUpdateAvailable').'</span>';
+    if ($forceUpgrade) {
+        print ' <span class="badge" style="background-color: #ef4444; color: #fff; padding: 3px 8px; border-radius: 9999px; font-size: 11px;">🚨 '.$langs->trans('KybForceUpgrade').'</span>';
+    }
+} else {
+    print '<span class="badge" style="background-color: #10b981; color: #fff; padding: 3px 9px; border-radius: 9999px; font-weight: 600;">✓ '.$langs->trans('KybUpToDate').'</span>';
+}
+print '</td>';
+print '</tr>';
+
+// Last telemetry sync row
+print '<tr class="oddeven">';
+print '<td class="titlefieldfield"><span class="fa fa-clock-o"></span> '.$langs->trans('KybLastTelemetry').'</td>';
+print '<td><small class="opacitymedium">'.$lastTelemetry.'</small></td>';
+print '</tr>';
+
+// Changelog row (if received from gateway)
+if (!empty($changelog)) {
+    print '<tr class="oddeven">';
+    print '<td class="titlefieldfield"><span class="fa fa-file-text-o"></span> '.$langs->trans('KybChangelog').'</td>';
+    print '<td><small>'.dol_escape_htmltag($changelog).'</small></td>';
+    print '</tr>';
+}
+
+print '</table>';
+
+// Action buttons: Check for update + 1-click upgrade
+print '<br><div class="center">';
+print '<a href="'.$_SERVER["PHP_SELF"].'?action=check_update" class="button">'.$langs->trans('KybBtnCheckUpdate').'</a>';
+if ($hasUpdate || $forceUpgrade) {
+    print '&nbsp;&nbsp;';
+    print '<a href="'.$_SERVER["PHP_SELF"].'?action=upgrade" class="button button-primary" style="background-color: #f59e0b; border-color: #d97706;" onclick="return confirm(\''.dol_escape_js($langs->trans('KybUpgradeConfirm')).'\')">⬆ '.$langs->trans('KybBtnUpgradeNow').'</a>';
+}
+print '</div>';
 
 // Regulatory & Mapping Informational Card
 print '<br><br>';
