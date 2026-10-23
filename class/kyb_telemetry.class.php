@@ -17,6 +17,10 @@
 
 require_once __DIR__ . '/kyb_client.class.php';
 
+if (!function_exists('dolibarr_set_const') && defined('DOL_DOCUMENT_ROOT')) {
+    require_once DOL_DOCUMENT_ROOT . '/core/lib/admin.lib.php';
+}
+
 /**
  * Class KybTelemetry
  * Collects aggregate, non-PII Dolibarr instance metrics and submits them
