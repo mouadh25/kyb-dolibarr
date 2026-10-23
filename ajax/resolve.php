@@ -63,8 +63,13 @@ if ($mode === 'candidates') {
         ));
         exit;
     }
+    if (strlen($q) > 100) {
+        $q = substr($q, 0, 100);
+    }
 
     $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : 10;
+    if ($limit < 1) $limit = 10;
+    if ($limit > 25) $limit = 25;
     $candidates = $client->searchCandidates($q, $limit);
 
     echo json_encode(array(
@@ -84,6 +89,9 @@ if (empty($identifier)) {
 if (empty($identifier)) {
     echo json_encode(array('success' => false, 'error' => 'Identifiant manquant'));
     exit;
+}
+if (strlen($identifier) > 50) {
+    $identifier = substr($identifier, 0, 50);
 }
 
 $result = $client->resolveEntity($identifier);

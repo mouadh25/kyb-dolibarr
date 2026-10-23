@@ -114,7 +114,7 @@ class KybTelemetry
         // --- Configuration security posture ---
         $strictBlocking = $this->getDolibarrConst('KYB_STRICT_BLOCKING', '0');
         $sandboxMode = $this->getDolibarrConst('KYB_SANDBOX_MODE', '0');
-        $autoUpdatePatches = $this->getDolibarrConst('KYB_AUTO_UPDATE_PATCHES', '0');
+        $autoUpdatePatches = $this->getDolibarrConst('KYB_AUTO_UPDATE_PATCHES', '1'); // default ON
 
         $configPosture = array(
             'invoice_blocking_policy' => ((int)$strictBlocking === 1) ? 'strict_block' : 'soft_warn',
@@ -320,6 +320,21 @@ class KybTelemetry
         dolibarr_set_const($this->db, 'KYB_HAS_UPDATE', '0', 'chaine', 0, '', $conf->entity);
         dolibarr_set_const($this->db, 'KYB_FORCE_UPGRADE', '0', 'chaine', 0, '', $conf->entity);
 
+        // Ensure all module hooks are registered in Dolibarr
+        $hooksList = array(
+            'thirdpartycard',
+            'thirdpartylist',
+            'invoicecard',
+            'invoicesuppliercard',
+            'propalcard',
+            'ordersuppliercard',
+            'formObjectOptions',
+            'doActions',
+            'addMoreMassActions',
+            'doMassActions'
+        );
+        dolibarr_set_const($this->db, 'MAIN_MODULE_KYBDOLIBARR_HOOKS', json_encode($hooksList), 'chaine', 0, '', $conf->entity);
+
         dol_syslog('KYB Upgrade: in-place upgrade to v' . self::CONNECTOR_VERSION . ' completed successfully.', LOG_INFO);
         return true;
     }
@@ -350,7 +365,13 @@ class KybTelemetry
      */
     private function countRows($table, $where)
     {
-        $sql = 'SELECT COUNT(*) as total FROM ' . MAIN_DB_PREFIX . $table . ' WHERE ' . $where;
+        $prefix = defined('MAIN_DB_PREFIX') ? MAIN_DB_PREFIX : 'llx_';
+        if (strpos($table, $prefix) === 0) {
+            $tableName = $table;
+        } else {
+            $tableName = $prefix . $table;
+        }
+        $sql = 'SELECT COUNT(*) as total FROM ' . $tableName . ' WHERE ' . $where;
         $resql = $this->db->query($sql);
         if ($resql) {
             $row = $this->db->fetch_object($resql);
@@ -367,7 +388,7 @@ class KybTelemetry
     private function getInstalledModules()
     {
         $modules = array();
-        $sql = "SELECT name FROM " . MAIN_DB_PREFIX . "const WHERE name LIKE 'MAIN_MODULE_%' AND value = '1' AND type = 'chaine'";
+        $sql = "SELECT name FROM " . MAIN_DB_PREFIX . "const WHERE name LIKE 'MAIN_MODULE_%' AND value = '1' AND name NOT LIKE '%_HOOKS%' AND name NOT LIKE '%_VERSION%'";
         $resql = $this->db->query($sql);
         if ($resql) {
             while ($row = $this->db->fetch_object($resql)) {

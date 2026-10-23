@@ -76,7 +76,8 @@ class KybCronTelemetry
         ), LOG_INFO);
 
         // ── Step 2: Decide whether to auto-apply upgrade ──────────────────────
-        $autoUpdate  = !empty($conf->global->KYB_AUTO_UPDATE_PATCHES) && (int)$conf->global->KYB_AUTO_UPDATE_PATCHES === 1;
+        // Default = enabled (1). Only disabled if admin explicitly saved '0'.
+        $autoUpdate  = !isset($conf->global->KYB_AUTO_UPDATE_PATCHES) || $conf->global->KYB_AUTO_UPDATE_PATCHES !== '0';
         $forceUpgrade = !empty($versionInfo['force_upgrade']);
         $hasUpdate    = !empty($versionInfo['has_update']);
 

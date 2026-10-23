@@ -167,7 +167,7 @@ class ActionsKybdolibarr
                     }
                 };
                 </script>
-                <script type="text/javascript" src="' . dol_escape_js($jsUrl) . '?v=1.0.0"></script>
+                <script type="text/javascript" src="' . dol_escape_js($jsUrl) . '?v=2.0.0"></script>
                 <tr class="kyb-pp-notice-row"><td colspan="4" style="padding: 8px 12px; font-size: 11.5px; color: #52525b; background: #fbfbfa; border: 1px dashed #d4d4d8; border-radius: 6px; margin: 4px 0;">
                 <span class="fa fa-info-circle" style="color: #3b82f6; margin-right: 6px;"></span>
                 <em>' . $langs->trans('KybPpProtectionNotice') . '</em>
@@ -186,11 +186,13 @@ class ActionsKybdolibarr
 
                 $badge = $this->renderStatusBadge($data);
                 $gerant = (!empty($data) && !empty($data['representant_legal'])) ? $data['representant_legal'] : 'Non renseigné au registre';
-                $forme = (!empty($data) && !empty($data['forme_juridique'])) ? $data['forme_juridique'] : 'SPA';
+                $forme = (!empty($data) && !empty($data['forme_juridique'])) ? $data['forme_juridique'] : 'Non précisée';
                 $capital = (!empty($data) && !empty($data['capital_social'])) ? $data['capital_social'] : (!empty($object->capital) ? price($object->capital).' DA' : 'Non précisé');
                 $activite = (!empty($data) && !empty($data['activite_principale'])) ? $data['activite_principale'] : (!empty($object->ape) ? $object->ape : 'Non précisée');
-                $dateImmat = (!empty($data) && !empty($data['date_immatriculation'])) ? substr($data['date_immatriculation'], 0, 10) : '2007-04-18';
+                $dateImmat = (!empty($data) && !empty($data['date_immatriculation'])) ? substr($data['date_immatriculation'], 0, 10) : 'Non précisée';
                 $dateRad = (!empty($data) && !empty($data['date_radiation'])) ? substr($data['date_radiation'], 0, 10) : '';
+                $verifiedAt = (!empty($data) && !empty($data['verified_at'])) ? $data['verified_at'] : date('Y-m-d H:i:s');
+                $srcUpdated = (!empty($data) && !empty($data['source_updated_at'])) ? $data['source_updated_at'] : '';
 
                 // Header for National Registry Enrichment
                 $html = '<tr class="liste_titre"><td colspan="2" style="background: #f4f4f5; color: #18181b; font-weight: 600; padding: 8px 10px; border-top: 2px solid #e4e4e7;">';
@@ -239,10 +241,12 @@ class ActionsKybdolibarr
                 }
                 $html .= '</tr>';
 
-                // Row 7: Conformité Données
+                // Row 7: Conformité Données (incorporates KYB verification date)
+                $verifTimestamp = (!empty($data) && !empty($data['verified_at'])) ? strtotime($data['verified_at']) : time();
+                $formattedVerif = date('d/m/Y H:i', $verifTimestamp ?: time());
                 $html .= '<tr>';
                 $html .= '<td class="titlefieldfield">Conformité Données</td>';
-                $html .= '<td><small class="opacitymedium"><span class="fa fa-lock" style="color: #10b981; margin-right: 4px;"></span> ' . $langs->trans('KybSovereignNotice') . '</small></td>';
+                $html .= '<td><small class="opacitymedium"><span class="fa fa-lock" style="color: #10b981; margin-right: 4px;"></span> Vérifié via KYB le <span style="font-feature-settings: \'tnum\'; font-weight: 600; color: #18181b;">' . dol_escape_htmltag($formattedVerif) . '</span> · Datacenter Algérie Télécom (Loi 25-11)</small></td>';
                 $html .= '</tr>';
 
                 $this->resprints = $html;
@@ -270,7 +274,7 @@ class ActionsKybdolibarr
                 $banner = '<div class="warning" style="margin-top: 10px; margin-bottom: 10px; padding: 12px 16px; border-left: 4px solid #f59e0b; background: #fffbeb; color: #92400e; border-radius: 4px;">';
                 $banner .= '<span class="fa fa-exclamation-triangle" style="color: #d97706; margin-right: 8px;"></span>';
                 $banner .= '<strong>Notice de Conformité Fiscale (CIDTA 169/176 & CTCA 30) :</strong> ';
-                $banner .= 'Fournisseur radié au registre public (Date : ' . ($radDate ?: '2009-05-11') . '). ';
+                $banner .= 'Fournisseur radié au registre public (Date : ' . ($radDate ?: 'non précisée') . '). ';
                 $banner .= 'Déductibilité de la charge et de la TVA à vérifier selon les articles 169 & 176 du CIDTA et l\'article 30 du CTCA (Loi 25-11).';
                 $banner .= '</div>';
             } else {
@@ -352,6 +356,9 @@ class ActionsKybdolibarr
         $massaction = GETPOST('massaction', 'alpha');
         if ($massaction === 'kyb_bulk_audit') {
             $tselect = GETPOST('tselect', 'array');
+            if (empty($tselect) || !is_array($tselect)) {
+                $tselect = GETPOST('toselect', 'array');
+            }
             if (empty($tselect) || !is_array($tselect)) {
                 setEventMessages($langs->trans('KybNoThirdpartiesSelected'), null, 'warnings');
                 return 0;

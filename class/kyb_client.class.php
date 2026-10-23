@@ -110,6 +110,8 @@ class KybClient
                 'activities' => isset($rawEntity['activities']) ? $rawEntity['activities'] : array(),
                 'activite_principale' => $mainActivity,
                 'wilaya' => isset($rawEntity['wilaya']) ? $rawEntity['wilaya'] : '',
+                'verified_at' => date('Y-m-d H:i:s'), // timestamp of this live KYB API query
+                'source_updated_at' => isset($rawEntity['updated_at']) ? substr($rawEntity['updated_at'], 0, 10) : (isset($rawEntity['updatedAt']) ? substr($rawEntity['updatedAt'], 0, 10) : ''),
                 'raw' => $rawEntity
             );
         }
@@ -194,8 +196,15 @@ class KybClient
         if (strlen($cleanQuery) < 3) {
             return array();
         }
+        if (strlen($cleanQuery) > 100) {
+            $cleanQuery = substr($cleanQuery, 0, 100);
+        }
 
-        $endpoint = '/api/v1/entity/candidates?q=' . urlencode($cleanQuery) . '&limit=' . (int)$limit;
+        $limit = (int)$limit;
+        if ($limit < 1) $limit = 10;
+        if ($limit > 25) $limit = 25;
+
+        $endpoint = '/api/v1/entity/candidates?q=' . urlencode($cleanQuery) . '&limit=' . $limit;
         $response = $this->request('GET', $endpoint);
 
         $rawList = null;
@@ -328,7 +337,7 @@ class KybClient
 
         $headers = array(
             'Accept: application/json',
-            'User-Agent: KYB-Dolibarr-Connector/1.0.0 (Dolibarr; PHP ' . PHP_VERSION . ')'
+            'User-Agent: KYB-Dolibarr-Connector/2.0.0 (Dolibarr; PHP ' . PHP_VERSION . ')'
         );
 
         if (!empty($this->apiKey)) {

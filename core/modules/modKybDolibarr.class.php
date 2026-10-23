@@ -133,8 +133,8 @@ class modKybDolibarr extends DolibarrModules
             7 => array(
                 'KYB_AUTO_UPDATE_PATCHES',
                 'chaine',
-                '0',
-                'Mise à jour autonome des correctifs : 1 = appliquer automatiquement via cron, 0 = 1-clic manuel uniquement',
+                '1',
+                'Mise à jour autonome des correctifs : 1 = appliquer automatiquement via cron (défaut), 0 = 1-clic manuel uniquement',
                 0
             ),
             8 => array(
@@ -195,7 +195,7 @@ class modKybDolibarr extends DolibarrModules
                 'comment'    => 'Envoie le heartbeat de télémétrie à la passerelle KYB et applique les correctifs autonomes si activés.',
                 'frequency'  => 1,
                 'unitfrequency' => 3600 * 24, // Daily (86400s)
-                'status'     => 0,           // 0 = active, 1 = disabled
+                'status'     => 1,           // 1 = enabled, 0 = disabled
                 'test'       => '$conf->global->MAIN_MODULE_KYBDOLIBARR',
                 'priority'   => 50,
             ),

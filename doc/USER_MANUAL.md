@@ -124,7 +124,7 @@ Chaque fiche tiers affichée dans Dolibarr (**Tiers → Liste des tiers → Fich
    * **Capital Social Certifié :** Montant du capital social libéré (chiffres tabulaires).
    * **Activité Principale (NAE) :** Code et libellé officiel de la nomenclature d'activités.
    * **Date d'Immatriculation / Radiation :** Historique temporel officiel CNRC.
-   * **Conformité Données :** `🔒 Vérifié par KYB depuis les portails publics · Datacenter Algérie Télécom (Loi 25-11)`.
+   * **Conformité Données :** `🔒 Vérifié via KYB le 23/10/2026 07:49 · Datacenter Algérie Télécom (Loi 25-11)`. Horodatage certifié de l'interrogation officielle au registre pour traçabilité d'audit comptable.
 
 ### Cas 1 : Entité Active et Conforme (Exemple Réel : CEVITAL AAGRO)
 * **Statut CNRC :** `🟢 ACTIF (Entité en règle au registre de commerce)`
