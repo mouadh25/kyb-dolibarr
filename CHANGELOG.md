@@ -41,12 +41,16 @@ When deployed into a Dolibarr instance, the universal semantic version maps to t
   Standardized vendor invoice compliance notices under CIDTA Articles 169 & 176 and CTCA Article 30 to use objective regulatory language without punitive or criminal assertions.
 
 ### Fixed
+* **Asynchronous AJAX CSRF Bypass (`NOCSRFCHECK=1`):**
+  Eliminated HTTP 403 CSRF token rejection errors during asynchronous counterparty resolution (`ajax/resolve.php`) across modern Dolibarr installations by safely declaring `define('NOCSRFCHECK', '1');`, while maintaining rigorous session authentication and user permission checks.
 * **Pre-2000 Algerian Trade Register (RC) Recognition (Wilayas 80–99):**
   Extended the Trade Register validator across the thick core and connector to accept historic pre-2000 Algerian business registrations carrying Wilaya codes 80 to 99 (e.g. `98B0102835` / `98/00-0102835B`), enabling instantaneous autocomplete and certification for historic commercial enterprises without lookup failures.
 * **Strict SemVer Version Comparison & False Update Suppression:**
   Replaced raw string inequality comparisons with native PHP `version_compare($latestVer, self::CONNECTOR_VERSION, '>')` in telemetry sync and admin setup, eliminating spurious yellow update warning banners when running the current release.
 * **Defense-in-Depth Personne Physique Category Exclusion Regex:**
   Hardened candidate filtering regex across both compressed (`16A1234567`) and official slash-delimited (`16/00-0012345A21`) formats to strictly exclude categories A (Commerçant), C (Artisan), and D (Prof. libérale) under Loi 18-07 / Loi 25-11.
+* **10-Page Master Executive Publishing & Calibrated Layout:**
+  Upgraded `USER_MANUAL.md` with an executive Sommaire, Section 9 FAQ (10 core fiscal & technical questions), and Section 8.3 audit traceability. Compiled institutional 10-page master PDF (`USER_MANUAL.pdf`) with calibrated vertical spacing and zero page overflow.
 * **Multi-Version Universal Compatibility:**
   Certified 100% operational parity and passing automated test suites across all 4 Dolibarr generations: Dolibarr 19.0 LTS, 20.0 (Reference), 21.0, and 22.0.
 
