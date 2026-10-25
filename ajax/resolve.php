@@ -8,6 +8,9 @@
  * @license   GPL-3.0-or-later
  */
 
+if (!defined('NOCSRFCHECK')) {
+    define('NOCSRFCHECK', '1');
+}
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1);
 }
