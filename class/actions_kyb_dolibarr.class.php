@@ -167,25 +167,6 @@ class ActionsKybdolibarr
                     }
                 };
                 </script>
-                $html = '
-                <!-- KYB Sovereign Auto-Completion & Full Enrichment Engine -->
-                <script type="text/javascript">
-                window.KYB_CFG = {
-                    ajaxUrl: "' . dol_escape_js($ajaxUrl) . '",
-                    token: "' . newToken() . '",
-                    workingGif: "' . dol_escape_js($workingGif) . '",
-                    labels: {
-                        header: "Référentiel National CNRC (Personnes Morales)",
-                        searching: "' . dol_escape_js($langs->trans('KybSearching')) . '",
-                        noResults: "' . dol_escape_js($langs->trans('KybNoResults')) . '",
-                        active: "' . dol_escape_js($langs->trans('KybStatusActive')) . '",
-                        radiated: "' . dol_escape_js($langs->trans('KybStatusRadiated')) . '",
-                        autofillSuccess: "' . dol_escape_js($langs->trans('KybAutofillSuccess')) . '",
-                        rateLimited: "' . dol_escape_js($langs->trans('KybRateLimited')) . '",
-                        hint: "' . dol_escape_js($langs->trans('KybAutocompleteHint')) . '"
-                    }
-                };
-                </script>
                 <script type="text/javascript" src="' . dol_escape_js($jsUrl) . '?v=2.0.4"></script>
                 <tr class="kyb-pp-notice-row"><td colspan="4" style="padding: 8px 12px; font-size: 11.5px; color: #52525b; background: #fbfbfa; border: 1px dashed #d4d4d8; border-radius: 6px; margin: 4px 0;">
                 <span class="fa fa-info-circle" style="color: #3b82f6; margin-right: 6px;"></span>
