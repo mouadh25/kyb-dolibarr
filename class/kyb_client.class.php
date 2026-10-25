@@ -226,7 +226,8 @@ class KybClient
 
                 if (strcasecmp($entityType, 'PP') === 0) continue;
                 if (stripos($forme, 'physique') !== false || strtoupper(trim($forme)) === 'PP') continue;
-                if (preg_match('/^[0-9]{1,2}[ACD]/i', $rc)) continue;
+                // Exclude Personne Physique categories A (Commerçant), C (Artisan), D (Prof. libérale) across compressed and official formats
+                if (preg_match('/^(?:0[0-9]|[1-6]\d|8[0-9]|9[0-9]|[0-9])(?:\/00-\d+|[A-Za-z0-9\s\/-]*?)[ACDacd]/i', $rc)) continue;
 
                 $filtered[] = $c;
             }
@@ -337,7 +338,7 @@ class KybClient
 
         $headers = array(
             'Accept: application/json',
-            'User-Agent: KYB-Dolibarr-Connector/2.0.0 (Dolibarr; PHP ' . PHP_VERSION . ')'
+            'User-Agent: KYB-Dolibarr-Connector/2.0.4 (Dolibarr; PHP ' . PHP_VERSION . ')'
         );
 
         if (!empty($this->apiKey)) {

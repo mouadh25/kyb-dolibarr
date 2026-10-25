@@ -36,7 +36,7 @@ class KybTelemetry
     /**
      * @var string Connector version reported in telemetry
      */
-    const CONNECTOR_VERSION = '2.0.0';
+    const CONNECTOR_VERSION = '2.0.4';
 
     /**
      * @var string Client type identifier sent to gateway fleet
@@ -179,12 +179,14 @@ class KybTelemetry
         }
 
         // Step 3: Persist results in Dolibarr constants for UI display and autonomous upgrade
-        $hasUpdate   = !empty($versionInfo['has_update']);
         $latestVer   = !empty($versionInfo['latest_version']) ? $versionInfo['latest_version'] : self::CONNECTOR_VERSION;
+        // Strict SemVer comparison: only flag update if latestVer is strictly greater than installed version
+        $hasUpdate   = version_compare($latestVer, self::CONNECTOR_VERSION, '>');
         $forceUpgrade = !empty($versionInfo['force_upgrade']);
         $changelog   = !empty($versionInfo['changelog']) ? $versionInfo['changelog'] : '';
 
         global $conf;
+        dolibarr_set_const($this->db, 'KYB_INSTALLED_VERSION', self::CONNECTOR_VERSION, 'chaine', 0, '', $conf->entity);
         dolibarr_set_const($this->db, 'KYB_LATEST_VERSION', $latestVer, 'chaine', 0, '', $conf->entity);
         dolibarr_set_const($this->db, 'KYB_HAS_UPDATE', $hasUpdate ? '1' : '0', 'chaine', 0, '', $conf->entity);
         dolibarr_set_const($this->db, 'KYB_FORCE_UPGRADE', $forceUpgrade ? '1' : '0', 'chaine', 0, '', $conf->entity);

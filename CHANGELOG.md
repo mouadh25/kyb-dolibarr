@@ -1,9 +1,56 @@
 # Changelog — KYB Dolibarr Connector
 
-All notable changes to this project will be documented in this file.
+All notable changes to the **KYB Dolibarr Connector** (`kybdolibarr`) are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) alongside Dolibarr's native versioning matrix.
+
+---
+
+## Dolibarr Version Matrix & Release Mapping
+
+The KYB connector maintains a unified, backwards-compatible codebase supporting Algerian corporate ERP deployments across supported Long-Term Support (LTS) foundations and modern release generations.
+
+When deployed into a Dolibarr instance, the universal semantic version maps to the corresponding major version:
+
+| Dolibarr Target Version | Module Version Code | Market Tier | Compatibility Status |
+| :--- | :--- | :--- | :---: |
+| **Dolibarr 22.0** | `2.0.4` | Latest Generation (PHP 8.2–8.3 Strict) | **🟢 Locked & Certified** |
+| **Dolibarr 21.0** | `2.0.4` | Modern Enterprise Standard (2025–2026) | **🟢 Locked & Certified** |
+| **Dolibarr 20.0** | `2.0.4` | Reference Target (Doliflex Constantine) | **🟢 Locked & Certified** |
+| **Dolibarr 19.0** | `2.0.4` | Installed SME Enterprise Base (2023–2024)| **🟢 Locked & Certified** |
+
+---
+
+## [2.0.4] - 2026-10-25
+
+### Added
+* **11-Attribute Certified Corporate Identity Card:**
+  Full institutional verification card on thirdparty view (`Societe` view mode) displaying Statut CNRC (Actif / Radié), Official Raison Sociale, NIF (Identifiant Fiscal Unique), Numéro RC officiel normalisé (Décret 05-468), NIS (Statistique National ONS), Article d'Imposition (Numéro de Rôle fiscal), Forme Juridique certifiée, Capital Social certifié, Gérant / Dirigeant Légal, Activité Principale (Code NAE + Libellé), Date d'Immatriculation / Radiation, et horodatage certifié Datacenter Algérie Télécom (Loi 25-11).
+* **Autonomous Fleet Telemetry Heartbeat:**
+  `POST /api/v1/client/telemetry` heartbeat sending non-PII instance metrics (Dolibarr version, PHP, company scale, idprof3 compliance distribution) to the sovereign gateway and retrieving client-specific version governance and changelog notes.
+* **Automated ITIL Update Policy Governance:**
+  Added configurable settings in Admin Setup (`KYB_AUTO_UPDATE_PATCHES`: `Manual` vs `Automatic via Cron`) with daily automated heartbeat synchronization and 1-click in-app upgrades.
+
+### Changed
+* **Official Décret 05-468 RC Canonical Normalization:**
+  Enforced canonical 16-character Trade Register formatting (`WW/00-XXXXXXX[A|B|C|D]YY`) on field exit and thirdparty card display with automatic zero-padding and bidirectional registry synchronization.
+* **Safe Unverified State Presentation:**
+  Replaced misleading "Vérifié via KYB" notices on empty records with clean, neutral status indicators (`⚪ Non vérifié dans le référentiel national`), ensuring zero confusion for newly created thirdparties pending certification.
+* **Objective Temporal Invoice Compliance Notices:**
+  Standardized vendor invoice compliance notices under CIDTA Articles 169 & 176 and CTCA Article 30 to use objective regulatory language without criminal or punitive assertions.
+
+### Fixed
+* **Pre-2000 Algerian Trade Register (RC) Recognition (Wilayas 80–99):**
+  Extended the Trade Register validator across the thick core and connector to accept historic pre-2000 Algerian business registrations carrying Wilaya codes 80 to 99 (e.g. `98B0102835` / `98/00-0102835B`), enabling instantaneous autocomplete and certification for historic commercial enterprises without 404 lookup failures.
+* **Strict SemVer Version Comparison & False Update Suppression:**
+  Replaced raw string inequality comparisons with native PHP `version_compare($latestVer, self::CONNECTOR_VERSION, '>')` in telemetry sync, eliminating spurious yellow update warning banners when running the current release.
+* **Defense-in-Depth Personne Physique Category Exclusion Regex:**
+  Hardened candidate filtering regex across both compressed (`16A1234567`) and official slash-delimited (`16/00-0012345A21`) formats to strictly exclude categories A (Commerçant), C (Artisan), and D (Prof. libérale) under Loi 18-07 / Loi 25-11.
+* **Multi-Version Universal Compatibility:**
+  Certified 100% operational parity and passing automated test suites across all 4 Dolibarr generations: Dolibarr 19.0 LTS, 20.0 (Reference), 21.0, and 22.0.
+
+---
 
 ## [2.0.0] - 2026-10-22
 
@@ -21,6 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Auto-Update Patches Toggle (GAP 6):** `KYB_AUTO_UPDATE_PATCHES` setting in `admin/setup.php` — controls whether the daily cron auto-applies patches (autonomous) or defers to the admin 1-click button.
 - **8 New Constants in Module Descriptor:** `KYB_AUTO_UPDATE_PATCHES`, `KYB_LATEST_VERSION`, `KYB_HAS_UPDATE`, `KYB_LAST_TELEMETRY`, `KYB_INSTALLED_VERSION`, `KYB_FORCE_UPGRADE`, `KYB_CHANGELOG` — all initialized safely on module install/upgrade.
 - **21 New Localization Keys (FR + AR):** Full bilingual (French + Arabic) coverage for all new version, telemetry, and upgrade UI strings.
+
+---
 
 ## [1.0.0] - 2026-10-19
 

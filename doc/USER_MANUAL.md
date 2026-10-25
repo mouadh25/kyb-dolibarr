@@ -1,5 +1,5 @@
 # KYB pour Dolibarr — Manuel Utilisateur & Guide Pratique d'Intégration
-**Version :** `1.0.0`  
+**Version :** `2.0.4`  
 **Cible :** Directeurs Financiers (DAF), Responsables Comptables, Gestionnaires des Achats et Ventes, Administrateurs ERP  
 **Portail KYB (by Digidev Agency) :** [kyb.digidevagency.dz](https://kyb.digidevagency.dz)  
 **Compatibilité :** Dolibarr 19.0 LTS, 20.0, 21.0, 22.0 (Community & Enterprise — PHP 8.0 à 8.3)

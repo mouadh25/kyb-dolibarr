@@ -44,7 +44,7 @@ class modKybDolibarr extends DolibarrModules
         $this->editor_url = 'https://kyb.digidevagency.dz';
 
         // Version of module
-        $this->version = '2.0.0';
+        $this->version = '2.0.4';
 
         // Constant name for activation tracking
         $this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -140,7 +140,7 @@ class modKybDolibarr extends DolibarrModules
             8 => array(
                 'KYB_LATEST_VERSION',
                 'chaine',
-                '2.0.0',
+                '2.0.4',
                 'Dernière version disponible du connecteur KYB (mise à jour par la passerelle)',
                 0
             ),
@@ -161,7 +161,7 @@ class modKybDolibarr extends DolibarrModules
             11 => array(
                 'KYB_INSTALLED_VERSION',
                 'chaine',
-                '2.0.0',
+                '2.0.4',
                 'Version du connecteur KYB actuellement installée (mise à jour lors de chaque upgrade)',
                 0
             ),

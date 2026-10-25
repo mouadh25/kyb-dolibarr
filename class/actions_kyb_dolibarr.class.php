@@ -167,7 +167,26 @@ class ActionsKybdolibarr
                     }
                 };
                 </script>
-                <script type="text/javascript" src="' . dol_escape_js($jsUrl) . '?v=2.0.0"></script>
+                $html = '
+                <!-- KYB Sovereign Auto-Completion & Full Enrichment Engine -->
+                <script type="text/javascript">
+                window.KYB_CFG = {
+                    ajaxUrl: "' . dol_escape_js($ajaxUrl) . '",
+                    token: "' . newToken() . '",
+                    workingGif: "' . dol_escape_js($workingGif) . '",
+                    labels: {
+                        header: "Référentiel National CNRC (Personnes Morales)",
+                        searching: "' . dol_escape_js($langs->trans('KybSearching')) . '",
+                        noResults: "' . dol_escape_js($langs->trans('KybNoResults')) . '",
+                        active: "' . dol_escape_js($langs->trans('KybStatusActive')) . '",
+                        radiated: "' . dol_escape_js($langs->trans('KybStatusRadiated')) . '",
+                        autofillSuccess: "' . dol_escape_js($langs->trans('KybAutofillSuccess')) . '",
+                        rateLimited: "' . dol_escape_js($langs->trans('KybRateLimited')) . '",
+                        hint: "' . dol_escape_js($langs->trans('KybAutocompleteHint')) . '"
+                    }
+                };
+                </script>
+                <script type="text/javascript" src="' . dol_escape_js($jsUrl) . '?v=2.0.4"></script>
                 <tr class="kyb-pp-notice-row"><td colspan="4" style="padding: 8px 12px; font-size: 11.5px; color: #52525b; background: #fbfbfa; border: 1px dashed #d4d4d8; border-radius: 6px; margin: 4px 0;">
                 <span class="fa fa-info-circle" style="color: #3b82f6; margin-right: 6px;"></span>
                 <em>' . $langs->trans('KybPpProtectionNotice') . '</em>
@@ -184,72 +203,94 @@ class ActionsKybdolibarr
                 $identifier = !empty($object->idprof3) ? $object->idprof3 : $object->idprof1;
                 $data = $client->resolveEntity($identifier);
 
-                $badge = $this->renderStatusBadge($data);
-                $gerant = (!empty($data) && !empty($data['representant_legal'])) ? $data['representant_legal'] : 'Non renseigné au registre';
-                $forme = (!empty($data) && !empty($data['forme_juridique'])) ? $data['forme_juridique'] : 'Non précisée';
-                $capital = (!empty($data) && !empty($data['capital_social'])) ? $data['capital_social'] : (!empty($object->capital) ? price($object->capital).' DA' : 'Non précisé');
-                $activite = (!empty($data) && !empty($data['activite_principale'])) ? $data['activite_principale'] : (!empty($object->ape) ? $object->ape : 'Non précisée');
-                $dateImmat = (!empty($data) && !empty($data['date_immatriculation'])) ? substr($data['date_immatriculation'], 0, 10) : 'Non précisée';
-                $dateRad = (!empty($data) && !empty($data['date_radiation'])) ? substr($data['date_radiation'], 0, 10) : '';
-                $verifiedAt = (!empty($data) && !empty($data['verified_at'])) ? $data['verified_at'] : date('Y-m-d H:i:s');
-                $srcUpdated = (!empty($data) && !empty($data['source_updated_at'])) ? $data['source_updated_at'] : '';
+                if (!empty($data) && is_array($data)) {
+                    $badge = $this->renderStatusBadge($data);
+                    $rs = !empty($data['raison_sociale']) ? $data['raison_sociale'] : (!empty($data['nom']) ? $data['nom'] : $object->name);
+                    $nif = !empty($data['nif']) ? $data['nif'] : (!empty($object->idprof3) ? $object->idprof3 : '');
+                    $rc = !empty($data['rc_official']) ? $data['rc_official'] : (!empty($data['rc']) ? $data['rc'] : (!empty($object->idprof1) ? $object->idprof1 : ''));
+                    $nis = !empty($data['nis']) ? $data['nis'] : (!empty($object->idprof4) ? $object->idprof4 : '');
+                    $ai = !empty($data['article_imposition']) ? $data['article_imposition'] : (!empty($object->idprof2) ? $object->idprof2 : '');
+                    $gerant = !empty($data['representant_legal']) ? $data['representant_legal'] : 'Non renseigné au registre';
+                    $forme = !empty($data['forme_juridique']) ? $data['forme_juridique'] : 'Non précisée';
+                    $capital = !empty($data['capital_social']) ? $data['capital_social'] : (!empty($object->capital) ? price($object->capital).' DA' : 'Non précisé');
+                    $activite = !empty($data['activite_principale']) ? $data['activite_principale'] : (!empty($object->ape) ? $object->ape : 'Non précisée');
+                    $dateImmat = !empty($data['date_immatriculation']) ? substr($data['date_immatriculation'], 0, 10) : 'Non précisée';
+                    $dateRad = !empty($data['date_radiation']) ? substr($data['date_radiation'], 0, 10) : '';
+                    $verifiedAt = !empty($data['verified_at']) ? $data['verified_at'] : date('Y-m-d H:i:s');
 
-                // Header for National Registry Enrichment
-                $html = '<tr class="liste_titre"><td colspan="2" style="background: #f4f4f5; color: #18181b; font-weight: 600; padding: 8px 10px; border-top: 2px solid #e4e4e7;">';
-                $html .= '<span class="fa fa-shield" style="color: #10b981; margin-right: 6px;"></span>';
-                $html .= $langs->trans('KybEnrichmentCardTitle');
-                $html .= '</td></tr>';
+                    // Header for National Registry Enrichment
+                    $html = '<tr class="liste_titre"><td colspan="2" style="background: #f4f4f5; color: #18181b; font-weight: 600; padding: 8px 10px; border-top: 2px solid #e4e4e7;">';
+                    $html .= '<span class="fa fa-shield" style="color: #10b981; margin-right: 6px;"></span>';
+                    $html .= 'Vérification KYB — Registre Officiel Algérien (Décret 05-468)';
+                    $html .= '</td></tr>';
 
-                // Row 1: Statut CNRC
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">' . $langs->trans('KybStatusLabel') . '</td>';
-                $html .= '<td>' . $badge . '</td>';
-                $html .= '</tr>';
+                    // Row 1: Statut CNRC
+                    $html .= '<tr><td class="titlefieldfield">' . $langs->trans('KybStatusLabel') . '</td><td>' . $badge . '</td></tr>';
 
-                // Row 2: Gérant / Dirigeant Légal
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">' . $langs->trans('KybLegalRepresentative') . '</td>';
-                $html .= '<td><strong>' . dol_escape_htmltag($gerant) . '</strong></td>';
-                $html .= '</tr>';
+                    // Row 2: Raison Sociale Officielle
+                    if (!empty($rs)) {
+                        $html .= '<tr><td class="titlefieldfield">Raison Sociale Officielle</td><td><strong style="color: #18181b;">' . dol_escape_htmltag($rs) . '</strong></td></tr>';
+                    }
 
-                // Row 3: Forme Juridique Certifiée
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">' . $langs->trans('KybLegalForm') . '</td>';
-                $html .= '<td>' . dol_escape_htmltag($forme) . '</td>';
-                $html .= '</tr>';
+                    // Row 3: NIF (Identifiant Fiscal)
+                    if (!empty($nif)) {
+                        $html .= '<tr><td class="titlefieldfield">NIF (Identifiant Fiscal Unique)</td><td><span style="font-family: monospace; font-weight: 600; font-feature-settings: \'tnum\';">' . dol_escape_htmltag($nif) . '</span></td></tr>';
+                    }
 
-                // Row 4: Capital Social Certifié
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">' . $langs->trans('KybShareCapital') . '</td>';
-                $html .= '<td><strong style="font-feature-settings: \'tnum\';">' . dol_escape_htmltag($capital) . '</strong></td>';
-                $html .= '</tr>';
+                    // Row 4: Numéro RC (Normalisé Décret 05-468)
+                    if (!empty($rc)) {
+                        $html .= '<tr><td class="titlefieldfield">Numéro RC (Registre du Commerce)</td><td><span style="font-family: monospace; font-weight: 600; font-feature-settings: \'tnum\';">' . dol_escape_htmltag($rc) . '</span></td></tr>';
+                    }
 
-                // Row 5: Activité Principale (NAE)
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">' . $langs->trans('KybMainActivity') . '</td>';
-                $html .= '<td>' . dol_escape_htmltag($activite) . '</td>';
-                $html .= '</tr>';
+                    // Row 5: NIS (Statistique National)
+                    if (!empty($nis)) {
+                        $html .= '<tr><td class="titlefieldfield">NIS (Identifiant Statistique)</td><td><span style="font-family: monospace; font-feature-settings: \'tnum\';">' . dol_escape_htmltag($nis) . '</span></td></tr>';
+                    }
 
-                // Row 6: Date Immatriculation / Radiation
-                $html .= '<tr>';
-                if (!empty($dateRad)) {
-                    $html .= '<td class="titlefieldfield" style="color: #dc2626; font-weight: 600;">' . $langs->trans('KybRadiationDate') . '</td>';
-                    $html .= '<td><span class="badge badge-danger" style="background-color: #ef4444; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 600;">' . dol_escape_htmltag($dateRad) . '</span> <small class="opacitymedium">(Immatriculée le ' . dol_escape_htmltag($dateImmat) . ')</small></td>';
+                    // Row 6: Article d'Imposition (Numéro de Rôle)
+                    if (!empty($ai)) {
+                        $html .= '<tr><td class="titlefieldfield">Article d\'Imposition (N° de Rôle)</td><td><span style="font-family: monospace; font-feature-settings: \'tnum\';">' . dol_escape_htmltag($ai) . '</span></td></tr>';
+                    }
+
+                    // Row 7: Forme Juridique Certifiée
+                    $html .= '<tr><td class="titlefieldfield">' . $langs->trans('KybLegalForm') . '</td><td>' . dol_escape_htmltag($forme) . '</td></tr>';
+
+                    // Row 8: Capital Social Certifié
+                    $html .= '<tr><td class="titlefieldfield">' . $langs->trans('KybShareCapital') . '</td><td><strong style="font-feature-settings: \'tnum\';">' . dol_escape_htmltag($capital) . '</strong></td></tr>';
+
+                    // Row 9: Gérant / Dirigeant Légal
+                    $html .= '<tr><td class="titlefieldfield">' . $langs->trans('KybLegalRepresentative') . '</td><td>' . dol_escape_htmltag($gerant) . '</td></tr>';
+
+                    // Row 10: Activité Principale (NAE)
+                    $html .= '<tr><td class="titlefieldfield">' . $langs->trans('KybMainActivity') . '</td><td>' . dol_escape_htmltag($activite) . '</td></tr>';
+
+                    // Row 11: Date Immatriculation / Radiation
+                    $html .= '<tr>';
+                    if (!empty($dateRad)) {
+                        $html .= '<td class="titlefieldfield" style="color: #dc2626; font-weight: 600;">' . $langs->trans('KybRadiationDate') . '</td>';
+                        $html .= '<td><span class="badge badge-danger" style="background-color: #ef4444; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 600;">' . dol_escape_htmltag($dateRad) . '</span> <small class="opacitymedium">(Immatriculée le ' . dol_escape_htmltag($dateImmat) . ')</small></td>';
+                    } else {
+                        $html .= '<td class="titlefieldfield">' . $langs->trans('KybRegistrationDate') . '</td>';
+                        $html .= '<td>' . dol_escape_htmltag($dateImmat) . '</td>';
+                    }
+                    $html .= '</tr>';
+
+                    // Row 12: Conformité Données
+                    $verifTimestamp = strtotime($verifiedAt);
+                    $formattedVerif = date('d/m/Y H:i', $verifTimestamp ?: time());
+                    $html .= '<tr><td class="titlefieldfield">Conformité Données</td>';
+                    $html .= '<td><small class="opacitymedium"><span class="fa fa-lock" style="color: #10b981; margin-right: 4px;"></span> Consultation Registre Officiel · <span style="font-feature-settings: \'tnum\'; font-weight: 600; color: #18181b;">' . dol_escape_htmltag($formattedVerif) . '</span> · Datacenter Algérie Télécom (Loi 25-11)</small></td></tr>';
+
+                    $this->resprints = $html;
                 } else {
-                    $html .= '<td class="titlefieldfield">' . $langs->trans('KybRegistrationDate') . '</td>';
-                    $html .= '<td>' . dol_escape_htmltag($dateImmat) . '</td>';
+                    // Safe unverified fallback banner (does not claim verified status)
+                    $html = '<tr class="liste_titre"><td colspan="2" style="background: #fafafa; color: #52525b; padding: 8px 10px; border-top: 1px solid #e4e4e7;">';
+                    $html .= '<span class="fa fa-shield" style="color: #71717a; margin-right: 6px;"></span> KYB Algérie — Registre Officiel';
+                    $html .= '</td></tr>';
+                    $html .= '<tr><td class="titlefieldfield">Statut Vérification</td>';
+                    $html .= '<td><span class="badge" style="background-color: #71717a; color: #fff; padding: 3px 9px; border-radius: 9999px;">⚪ Non vérifié dans le référentiel national</span> <small class="opacitymedium">(Identifiant: ' . dol_escape_htmltag($identifier) . ')</small></td></tr>';
+                    $this->resprints = $html;
                 }
-                $html .= '</tr>';
-
-                // Row 7: Conformité Données (incorporates KYB verification date)
-                $verifTimestamp = (!empty($data) && !empty($data['verified_at'])) ? strtotime($data['verified_at']) : time();
-                $formattedVerif = date('d/m/Y H:i', $verifTimestamp ?: time());
-                $html .= '<tr>';
-                $html .= '<td class="titlefieldfield">Conformité Données</td>';
-                $html .= '<td><small class="opacitymedium"><span class="fa fa-lock" style="color: #10b981; margin-right: 4px;"></span> Vérifié via KYB le <span style="font-feature-settings: \'tnum\'; font-weight: 600; color: #18181b;">' . dol_escape_htmltag($formattedVerif) . '</span> · Datacenter Algérie Télécom (Loi 25-11)</small></td>';
-                $html .= '</tr>';
-
-                $this->resprints = $html;
             }
             return 0;
         }

@@ -38,10 +38,10 @@ The KYB Dolibarr module is engineered to run seamlessly across all major modern 
 
 | Dolibarr Version | Supported PHP Runtimes | Status | Deployment Target & Notes | Recommended Download Package |
 | :--- | :--- | :---: | :--- | :--- |
-| **Dolibarr 19.0.x** | PHP 8.0, 8.1, 8.2 | **Verified** | Installed enterprise base (Algerian SMEs 2023–2024) | [`module_kybdolibarr-1.0.0.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
-| **Dolibarr 20.0.x** | PHP 8.1, 8.2 | **Verified (Reference)** | Cloud baseline (**Doliflex Constantine** standard) | [`module_kybdolibarr-1.0.0.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
-| **Dolibarr 21.0.x** | PHP 8.1, 8.2, 8.3 | **Verified** | Modern 2025/2026 enterprise installations | [`module_kybdolibarr-1.0.0.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
-| **Dolibarr 22.0.x** | PHP 8.2, 8.3 | **Verified** | Latest rolling release, strict PHP typing | [`module_kybdolibarr-1.0.0.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
+| **Dolibarr 19.0.x** | PHP 8.0, 8.1, 8.2 | **Verified** | Installed enterprise base (Algerian SMEs 2023–2024) | [`module_kybdolibarr-2.0.4.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
+| **Dolibarr 20.0.x** | PHP 8.1, 8.2 | **Verified (Reference)** | Cloud baseline (**Doliflex Constantine** standard) | [`module_kybdolibarr-2.0.4.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
+| **Dolibarr 21.0.x** | PHP 8.1, 8.2, 8.3 | **Verified** | Modern 2025/2026 enterprise installations | [`module_kybdolibarr-2.0.4.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
+| **Dolibarr 22.0.x** | PHP 8.2, 8.3 | **Verified** | Latest rolling release, strict PHP typing | [`module_kybdolibarr-2.0.4.zip`](https://github.com/mouadh25/kyb-dolibarr/releases/latest) |
 
 > **Architectural Note:** In Dolibarr, the HookManager API and core object descriptors maintain robust backward and forward compatibility. The module descriptor `modKybDolibarr.class.php` natively declares:
 > ```php
@@ -53,7 +53,7 @@ The KYB Dolibarr module is engineered to run seamlessly across all major modern 
 
 ### 2.2 Download Links
 
-* **Official Module ZIP:** [Download `module_kybdolibarr-1.0.0.zip` (Releases)](https://github.com/mouadh25/kyb-dolibarr/releases/latest)
+* **Official Module ZIP:** [Download `module_kybdolibarr-2.0.4.zip` (Releases)](https://github.com/mouadh25/kyb-dolibarr/releases/latest)
 * **Institutional User Manual (PDF):** [Download `USER_MANUAL.pdf`](doc/USER_MANUAL.pdf)
 
 ---
@@ -62,12 +62,12 @@ The KYB Dolibarr module is engineered to run seamlessly across all major modern 
 
 ### Option A: 1-Click via Dolibarr Web GUI (Recommended for All Versions)
 
-1. Download **`module_kybdolibarr-1.0.0.zip`** from [GitHub Releases](https://github.com/mouadh25/kyb-dolibarr/releases/latest).
+1. Download **`module_kybdolibarr-2.0.4.zip`** from [GitHub Releases](https://github.com/mouadh25/kyb-dolibarr/releases/latest).
 2. Log into your Dolibarr instance with an Administrator account.
 3. In the left navigation menu, go to:  
    **Accueil → Configuration → Modules/Applications → Déployer/Installer un module externe**  
    *(Home → Setup → Modules/Applications → Deploy external module)*.
-4. Drag and drop or upload `module_kybdolibarr-1.0.0.zip`.
+4. Drag and drop or upload `module_kybdolibarr-2.0.4.zip`.
 5. Dolibarr automatically unpacks the module into `custom/kybdolibarr/`.
 6. Navigate to the **Modules financiers** (*Financial Modules*) tab.
 7. Locate **KYB Algérie** and click the toggle switch to **ACTIF / ON**.
