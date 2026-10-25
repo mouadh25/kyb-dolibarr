@@ -28,7 +28,7 @@ Le module **KYB pour Dolibarr** connecte votre ERP à la passerelle de vérifica
 Le déploiement du module s'effectue en quelques étapes simples dans votre instance Dolibarr.
 
 ### Étape 1 : Déploiement de l'Archive
-1. Téléchargez l'archive officielle `module_kybdolibarr-1.0.0.zip` depuis votre espace client ou portail d'onboarding.
+1. Téléchargez l'archive officielle `module_kybdolibarr-2.0.4.zip` depuis votre espace client ou portail d'onboarding.
 2. Connectez-vous en tant qu'administrateur dans Dolibarr.
 3. Rendez-vous dans **Accueil → Configuration → Modules/Applications → Déployer un module externe**.
 4. Téléversez le fichier ZIP. Dolibarr installe automatiquement le module dans le répertoire `custom/kybdolibarr`.

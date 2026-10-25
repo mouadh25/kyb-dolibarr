@@ -62,7 +62,11 @@ if ($action == 'check_update') {
     $telemetry   = new KybTelemetry($db);
     $checkResult = $telemetry->syncWithGateway();
     if ($checkResult) {
-        setEventMessages($langs->trans('KybCheckUpdateDone', $checkResult['latest_version']), null, 'mesgs');
+        if (!empty($checkResult['has_update'])) {
+            setEventMessages($langs->trans('KybUpdateAvailableMsg', $checkResult['latest_version']), null, 'warnings');
+        } else {
+            setEventMessages($langs->trans('KybUpToDateMsg', KybTelemetry::CONNECTOR_VERSION), null, 'mesgs');
+        }
     } else {
         setEventMessages($langs->trans('KybCheckUpdateFailed'), null, 'warnings');
     }

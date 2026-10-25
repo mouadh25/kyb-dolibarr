@@ -142,7 +142,22 @@ In accordance with Algerian tax governance, the connector strictly refrains from
 
 ---
 
-## 7. Architecture & Keep-Alive Flow
+## 7. Versioning & Release Changelog
+
+The connector follows [Semantic Versioning](https://semver.org) and adheres to Dolibarr's native version mapping.
+
+For detailed release history, new features, bug fixes, and upgrade notes across versions, consult the official [CHANGELOG.md](CHANGELOG.md).
+
+| Dolibarr Target Version | Module Version Code | Market Adoption & Tier | Multi-Language (i18n) | Status |
+| :--- | :--- | :--- | :---: | :---: |
+| **Dolibarr 22.0** | `2.0.4` | Latest Generation (PHP 8.2–8.3 Strict) | FR / AR | **🟢 Locked & Certified** |
+| **Dolibarr 21.0** | `2.0.4` | Modern Enterprise Standard (2025–2026) | FR / AR | **🟢 Locked & Certified** |
+| **Dolibarr 20.0** | `2.0.4` | Reference Target (Doliflex Constantine) | FR / AR | **🟢 Locked & Certified** |
+| **Dolibarr 19.0** | `2.0.4` | Installed SME Enterprise Base (2023–2024)| FR / AR | **🟢 Locked & Certified** |
+
+---
+
+## 8. Architecture & Keep-Alive Flow
 
 ```
 ┌───────────────────────────────────────┐                     ┌─────────────────────────────────────────┐
@@ -173,7 +188,7 @@ In accordance with Algerian tax governance, the connector strictly refrains from
 
 ---
 
-## 8. Documentation & Technical Resources
+## 9. Documentation & Technical Resources
 
 * **Sovereign Gateway Web Portal:** [kyb.digidevagency.dz](https://kyb.digidevagency.dz)
 * **Authoritative API Documentation:** [kyb.digidevagency.dz/docs](https://kyb.digidevagency.dz/docs)
@@ -183,7 +198,7 @@ In accordance with Algerian tax governance, the connector strictly refrains from
 
 ---
 
-## 9. License & Commercial Support
+## 10. License & Commercial Support
 
 * **License:** Distributed under the **GNU General Public License v3.0 (GPL-3.0)**.
 * **Commercial Inquiries & Integrations:** `contact@digidevagency.dz`
