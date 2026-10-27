@@ -334,6 +334,10 @@ class ActionsKybdolibarr
                 return '<span class="badge badge-status badge-status8 badge-danger" style="background-color: #ef4444; color: #fff; padding: 4px 10px; border-radius: 9999px;">'
                     . '🔴 ' . $langs->trans('KybStatusRadiated') . ' (' . $radDate . ')'
                     . '</span>';
+            } elseif (strpos($statusUpper, 'SUSP') !== false) {
+                return '<span class="badge badge-status badge-status3 badge-warning" style="background-color: #f59e0b; color: #fff; padding: 4px 10px; border-radius: 9999px;">'
+                    . '🟠 ' . (isset($langs->tab_translate['KybStatusSuspended']) ? $langs->trans('KybStatusSuspended') : 'SUSPENDU')
+                    . '</span>';
             } else {
                 return '<span class="badge badge-status badge-status4 badge-success" style="background-color: #10b981; color: #fff; padding: 4px 10px; border-radius: 9999px;">'
                     . '🟢 ' . $langs->trans('KybStatusActive')

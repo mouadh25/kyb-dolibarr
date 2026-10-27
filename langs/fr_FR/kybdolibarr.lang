@@ -24,6 +24,7 @@ KybEnrichmentCardTitle = Identification Légale & Fiscale (Vérifié par KYB)
 KybStatusLabel = Statut au Registre du Commerce (CNRC)
 KybStatusActive = ACTIF (Entité en règle au registre de commerce)
 KybStatusRadiated = RADIÉ (Radiation constatée au registre)
+KybStatusSuspended = SUSPENDU (Activité suspendue au registre)
 KybStatusUnverified = NON VÉRIFIÉ (Aucune interrogation effectuée)
 KybNoIdentifier = Identifiant fiscal ou registre de commerce manquant
 

@@ -15,10 +15,22 @@ When deployed into a Dolibarr instance, the universal semantic version maps to t
 
 | Dolibarr Target Version | Module Version Code | Market Tier | Compatibility Status |
 | :--- | :--- | :--- | :---: |
-| **Dolibarr 22.0** | `2.0.4` | Latest Generation (PHP 8.2–8.3 Strict) | **🟢 Locked & Certified** |
-| **Dolibarr 21.0** | `2.0.4` | Modern Enterprise Standard (2025–2026) | **🟢 Locked & Certified** |
-| **Dolibarr 20.0** | `2.0.4` | Reference Target (Doliflex Constantine) | **🟢 Locked & Certified** |
-| **Dolibarr 19.0** | `2.0.4` | Installed SME Enterprise Base (2023–2024)| **🟢 Locked & Certified** |
+| **Dolibarr 22.0** | `2.0.5` | Latest Generation (PHP 8.2–8.3 Strict) | **🟢 Locked & Certified** |
+| **Dolibarr 21.0** | `2.0.5` | Modern Enterprise Standard (2025–2026) | **🟢 Locked & Certified** |
+| **Dolibarr 20.0** | `2.0.5` | Reference Target (Doliflex Constantine) | **🟢 Locked & Certified** |
+| **Dolibarr 19.0** | `2.0.5` | Installed SME Enterprise Base (2023–2024)| **🟢 Locked & Certified** |
+
+---
+
+## [2.0.5] - 2026-10-26
+
+### Added
+* **Multi-Status Institutional Badge Alignment (ADR #195):**
+  Added explicit support for `SUSPENDU` status badge (`🟠 SUSPENDU`, `badge-status3 badge-warning`) alongside `ACTIF` (`🟢 ACTIF`), `RADIÉ` (`🔴 RADIÉ`), and `NON VÉRIFIÉ` (`⚪ NON VÉRIFIÉ`), aligning Dolibarr directly with Odoo 20 and Gateway institutional conventions.
+* **Full Auto-Entrepreneur 20-Digit NIF Interoperability (Loi 22-23):**
+  Transparent thirdparty resolution and tax compliance verification for auto-entrepreneurs using 20-digit NIFs (`/api/v1/entity/resolve`) with zero required RC.
+* **Pre-2022 Wilaya 00 Corporate NIF Support:**
+  Seamless support for enterprises registered prior to 2022 in Wilaya 00 (e.g. `000016001147281`) without triggering sandbox mock intercepts.
 
 ---
 

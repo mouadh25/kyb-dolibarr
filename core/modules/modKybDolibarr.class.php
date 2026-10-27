@@ -44,7 +44,7 @@ class modKybDolibarr extends DolibarrModules
         $this->editor_url = 'https://kyb.digidevagency.dz';
 
         // Version of module
-        $this->version = '2.0.4';
+        $this->version = '2.0.5';
 
         // Constant name for activation tracking
         $this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);

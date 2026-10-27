@@ -18,6 +18,7 @@ KybEnrichmentCardTitle = الهوية القانونية والامتثال ال
 KybStatusLabel = الحالة بالسجل التجاري (CNRC)
 KybStatusActive = نشط (المؤسسة في وضعية قانونية سليمة)
 KybStatusRadiated = مشطب (تم رصد الشطب من السجل التجاري)
+KybStatusSuspended = معلق (النشاط معلق في السجل التجاري)
 KybStatusUnverified = غير مفحوص
 KybNoIdentifier = رقم السجل التجاري أو المعرف الجبائي غير مسجل
 
